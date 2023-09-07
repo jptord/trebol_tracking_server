@@ -1,5 +1,5 @@
-const { Servidor }    = require("./libs/servidor.js");
-const { Metajson }    = require("./libs/metajson.js");
+const { Servidor }    = require("./libs/server/servidor.js");
+const { Metajson }    = require("./libs//server/metajson.js");
 //const { Ldapclient }  = require("./libs/ldapclient.js");
 //let ldapclient  = new Ldapclient();
 let servidor    = new Servidor("8787", __dirname + '/public');
