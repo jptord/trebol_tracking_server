@@ -1,0 +1,3 @@
+[submodule "libs/njt-server"]
+	path = libs/njt-server
+	url = git@bitbucket.org:keizerberos/njt-server.git
