@@ -1,5 +1,6 @@
 const { Servidor }    = require("./libs/server/servidor.js");
 const { Metajson }    = require("./libs//server/metajson.js");
+const { udpServer }   = require("./libs/udpserver.js")
 //const { Ldapclient }  = require("./libs/ldapclient.js");
 //let ldapclient  = new Ldapclient();
 let servidor    = new Servidor("7676", __dirname + '/public');
@@ -24,3 +25,4 @@ servidor.get('/json',(req,res) => {
   res.setHeader('Content-Type', 'application/json');
   res.send(json);  
 });
+
