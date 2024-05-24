@@ -1,16 +1,18 @@
 const { Servidor }    = require("./libs/server/servidor.js");
-const { Metajson }    = require("./libs//server/metajson.js");
-const { udpServer }   = require("./libs/udpserver.js")
+const { Metajson }    = require("./libs/server/metajson.js");
+const { UdpServer }   = require("./libs/server/udpserver.js")
 //const { Ldapclient }  = require("./libs/ldapclient.js");
 //let ldapclient  = new Ldapclient();
 let servidor    = new Servidor("7676", __dirname + '/public');
 let metajson    = new Metajson('datos.json');
+let udpServer    = new UdpServer(9944);
 
 servidor.iniciar();
 
 servidor.get('/info',(req,res) => { 
   console.log('info');
-  res.end('info');
+  console.log(udpServer.getInfo());
+  res.end(JSON.stringify(udpServer.getInfo()));
 });
 
 servidor.post('/json',(req,res) => { 
