@@ -1,11 +1,17 @@
 const { Servidor }    = require("./libs/server/servidor.js");
 const { Metajson }    = require("./libs/server/metajson.js");
-const { UdpServer }   = require("./libs/server/udpserver.js")
+const { UdpServer }   = require("./libs/updserver/udpserver.js")
+const { KafkaGPS }   = require("./libs/kafka/kafkagps.js")
 //const { Ldapclient }  = require("./libs/ldapclient.js");
 //let ldapclient  = new Ldapclient();
-let servidor    = new Servidor("7676", __dirname + '/public');
+let servidor    = new Servidor("7777", __dirname + '/public');
 let metajson    = new Metajson('datos.json');
 let udpServer    = new UdpServer(9944);
+let kafkagps    = new KafkaGPS({ brokers : ["172.20.50.67:9092"]});
+
+udpServer.addReceiveEvent((msg) => {
+    kafkagps.send(msg);
+});
 
 servidor.iniciar();
 
