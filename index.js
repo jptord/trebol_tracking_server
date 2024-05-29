@@ -1,26 +1,32 @@
-const { Servidor }    = require("./libs/server/servidor.js");
-const { Metajson }    = require("./libs/server/metajson.js");
-const { UdpServer }   = require("./libs/updserver/udpserver.js")
+const { Servidor }   = require("./libs/servercore/servidor.js");
+const { Metajson }   = require("./libs/servercore/metajson.js");
+const { UdpServer }  = require("./libs/updserver/udpserver.js")
 const { KafkaGPS }   = require("./libs/kafka/kafkagps.js")
 //const { Ldapclient }  = require("./libs/ldapclient.js");
 //let ldapclient  = new Ldapclient();
-let servidor    = new Servidor("7777", __dirname + '/public');
-let metajson    = new Metajson('datos.json');
-let udpServer    = new UdpServer(9944);
-let kafkagps    = new KafkaGPS({ brokers : ["172.20.50.67:9092"]});
+let servidor        = new Servidor("7777", __dirname + '/public');
+let metajson        = new Metajson('datos.json');
+let udpServerLive   = new UdpServer(9944);
+let udpServerTrack  = new UdpServer(9945);
+let kafkagps        = new KafkaGPS({ brokers : ["172.20.50.67:9092"]});
 
-udpServer.addReceiveEvent((msg) => {
-    kafkagps.send(msg);
+udpServerLive.addReceiveEvent((msg) => {
+  kafkagps.send('gps-live',msg);
+});
+
+udpServerTrack.addReceiveEvent((msg) => {
+  kafkagps.send('gps-track',msg);
 });
 
 servidor.iniciar();
 
 servidor.get('/info',(req,res) => { 
   console.log('info');
-  console.log(udpServer.getInfo());
-  res.end(JSON.stringify(udpServer.getInfo()));
+  console.log(udpServerLive.getInfo());
+  console.log(udpServerTrack.getInfo());
+  res.end(JSON.stringify({liveServer:udpServerLive.getInfo(),trackServer:udpServerTrack.getInfo()}));
 });
-
+/*
 servidor.post('/json',(req,res) => { 
   console.log("req.body",req.body);
   metajson.set(req.body);
@@ -34,3 +40,4 @@ servidor.get('/json',(req,res) => {
   res.send(json);  
 });
 
+*/

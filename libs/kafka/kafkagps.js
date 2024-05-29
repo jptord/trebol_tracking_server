@@ -16,20 +16,17 @@ class KafkaGPS{
             allowAutoTopicCreation: false,
             transactionTimeout: 10000});
         this.isConnected    = true;
-        /*this.producer.on(Kafka.ProducerEvents['CONNECT'],()=>{
-            console.log("Producer is connected");
-        });*/
         this.connectProducer();            
 	}
     connectProducer(){        
         
     }
-    async send(msg){
+    async send(topic,msg){
       //  if ( !this.producer.isConnected() ) return ;
         try{
             await this.producer.connect()
             await this.producer.send({
-                topic: 'gps-live',
+                topic: topic,
                 messages: [{value:msg}],
             })
         }catch(e){
